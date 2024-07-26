@@ -46,7 +46,7 @@ def test_adicionar_evento_nome_repetido():
     eventos_nomes = [evento.nome for evento in agenda.eventos]
     assert eventos_nomes.count("Evento 3") == 1
 
-def test_adicionar_evento_quando_ha_conflito1():
+def test_conflito_inicio_dentro_termino_depois():
     agenda = Agenda()
     
     data_inicio = datetime.strptime("2024-01-01 10:00", "%Y-%m-%d %H:%M")
@@ -56,13 +56,13 @@ def test_adicionar_evento_quando_ha_conflito1():
     agenda.adicionar_evento(evento1)
     
     data_inicio = datetime.strptime("2024-01-01 11:00", "%Y-%m-%d %H:%M")
-    data_termino = datetime.strptime("2024-01-01 12:00", "%Y-%m-%d %H:%M")
+    data_termino = datetime.strptime("2024-01-01 13:00", "%Y-%m-%d %H:%M")
     
     evento2 = Evento("Evento 2", data_inicio, data_termino)
     res = agenda.adicionar_evento(evento2)
     assert res == False
     
-def test_adicionar_evento_quando_ha_conflito2():
+def test_conflito_inicio_antes_termino_dentro():
     agenda = Agenda()
     
     data_inicio = datetime.strptime("2024-01-01 10:00", "%Y-%m-%d %H:%M")
@@ -71,7 +71,7 @@ def test_adicionar_evento_quando_ha_conflito2():
     evento1 = Evento("Evento 1", data_inicio, data_termino)
     agenda.adicionar_evento(evento1)
     
-    data_inicio = datetime.strptime("2024-01-01 09:00", "%Y-%m-%d %H:%M")
+    data_inicio = datetime.strptime("2024-01-01 09:30", "%Y-%m-%d %H:%M")
     data_termino = datetime.strptime("2024-01-01 11:00", "%Y-%m-%d %H:%M")
     
     evento2 = Evento("Evento 2", data_inicio, data_termino)
@@ -79,6 +79,23 @@ def test_adicionar_evento_quando_ha_conflito2():
         
     assert res == False
 
+def test_conflito_cobre_evento_existente():
+    agenda = Agenda()
+    
+    data_inicio1 = datetime.strptime("2024-01-01 10:00", "%Y-%m-%d %H:%M")
+    data_termino1 = datetime.strptime("2024-01-01 12:00", "%Y-%m-%d %H:%M")
+    
+    evento1 = Evento("Evento 1", data_inicio1, data_termino1)
+    agenda.adicionar_evento(evento1)
+    
+    data_inicio1 = datetime.strptime("2024-01-01 09:00", "%Y-%m-%d %H:%M")
+    data_termino1 = datetime.strptime("2024-01-01 13:00", "%Y-%m-%d %H:%M")
+    
+    evento2 = Evento("Evento 2", data_inicio1, data_termino1)
+    res = agenda.adicionar_evento(evento2)
+        
+    assert res == False
+    
 def test_remover_evento():
     agenda = Agenda()
      

@@ -18,8 +18,7 @@ class Agenda:
             if ev.nome == evento.nome:
                 raise ValueError("Um evento com mesmo nome já existe na agenda.")
             
-            if (evento.inicio >= ev.inicio and evento.fim <= ev.inicio) or (
-                evento.fim >= ev.inicio and evento.fim <= ev.fim):
+            if evento.inicio < ev.fim and evento.fim > ev.inicio:
                 return False
             
         self.eventos.append(evento)
@@ -32,12 +31,10 @@ class Agenda:
                 return True
         return False
         
-        
     def mostrar_agenda(self):
         if not self.eventos:
             return "Nenhum evento agendado."
-        else:
-            return "\n".join([f"{evento.nome}: {evento.inicio} a {evento.fim}" for evento in self.eventos]) + "\n"
+        return "\n".join([f"{evento.nome}: {evento.inicio} a {evento.fim}\n" for evento in self.eventos])
 
     def sair(self):
         return "Saindo da aplicação."
